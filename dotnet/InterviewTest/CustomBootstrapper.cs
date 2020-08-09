@@ -10,6 +10,7 @@ namespace InterviewTest
       base.ConfigureApplicationContainer(container);
       container.Register<IStudentCollection, StudentCollection>();
       container.Register<ITeacherCollection, TeacherCollection>();
+      container.Register<IAssignmentCollection, AssignmentCollection>();
     }
   }
 }

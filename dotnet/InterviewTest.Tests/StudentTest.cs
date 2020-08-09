@@ -71,5 +71,57 @@ namespace InterviewTest.Tests
             var studentList = result.Body.DeserializeJson<Student[]>();
             Assert.Single(studentList, testStudent);
         }
+
+
+    [Fact]
+    public async Task Should_AddAssignmentToStudentAsync()
+    {
+      var bootstrapper = new CustomBootstrapper();
+      var browser = new Browser(bootstrapper);
+
+      var testStudent = await browser.CreateTestStudentAsync();
+      var testAssignment = await browser.CreateTestAssignmentAsync();
+
+      var putBody = new { StudentAssignment = new StudentAssignment(testAssignment) };
+      var result = await browser.Put($"/students/{testStudent.Id}",
+          with =>
+          {
+            with.HttpRequest();
+            with.JsonBody(putBody);
+          });
+
+      Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+      var updatedStudent = result.Body.DeserializeJson<Student>();
+      Assert.Equal(1, updatedStudent.Assignments.Count);
+      Assert.Equal(testAssignment, updatedStudent.Assignments[0].Assignment);
     }
+
+    [Fact]
+    public async Task Should_SetGradeToPassForStudentAssignmentAsync()
+    {
+      var bootstrapper = new CustomBootstrapper();
+      var browser = new Browser(bootstrapper);
+
+      var testStudent = await browser.CreateTestStudentAsync();
+      var testAssignment = await browser.CreateTestAssignmentAsync();
+      await browser.AddAssignmentToStudentAsync(testAssignment, testStudent.Id);
+
+
+      var testStudentAssignment = new StudentAssignment(testAssignment);
+      testStudentAssignment.Grade = AssignmentGrade.Pass;
+
+      var putBody = new { StudentAssignment = testStudentAssignment };
+      var result = await browser.Put($"/students/{testStudent.Id}",
+          with =>
+          {
+            with.HttpRequest();
+            with.JsonBody(putBody);
+          });
+
+      Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+      var updatedStudent = result.Body.DeserializeJson<Student>();
+      Assert.Equal(1, updatedStudent.Assignments.Count);
+      Assert.Equal(AssignmentGrade.Pass, updatedStudent.Assignments[0].Grade);
+    }
+  }
 }
