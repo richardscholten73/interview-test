@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace InterviewTest
 {
   public class StudentAssignment
@@ -10,6 +12,9 @@ namespace InterviewTest
     }
     public Assignment Assignment { get; set; }
     public AssignmentGrade Grade { get; set; }
+
+    public DateTime? Completed { get; set; }
+
   }
 
   public enum AssignmentGrade

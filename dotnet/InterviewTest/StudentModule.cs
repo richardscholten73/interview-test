@@ -2,6 +2,7 @@ namespace InterviewTest
 {
   using Nancy;
   using Nancy.ModelBinding;
+  using System;
 
   public sealed class StudentModule : NancyModule
   {
@@ -58,6 +59,7 @@ namespace InterviewTest
           if (studentAssignment != null)
           {
             studentAssignment.Grade = updates.StudentAssignment.Grade;
+            studentAssignment.Completed = DateTime.UtcNow;
           } 
           else
           {
