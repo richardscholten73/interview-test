@@ -28,9 +28,5 @@ namespace InterviewTest
       return _teachers[teacherId];
     }
 
-    public void Clear()
-    {
-      _teachers = new Dictionary<string, Teacher>();
-    }
   }
 }

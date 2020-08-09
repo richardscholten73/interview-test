@@ -28,11 +28,6 @@ namespace InterviewTest
       return students[studentId];
     }
 
-    public void Clear()
-    {
-      students = new Dictionary<string, Student>();
-    }
-
     public void Update(Student studentToUpdate)
     {
       students[studentToUpdate.Id].Name = studentToUpdate.Name;

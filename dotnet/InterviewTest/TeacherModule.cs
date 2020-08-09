@@ -7,7 +7,7 @@ namespace InterviewTest
 
     public sealed class TeacherModule : NancyModule
     {
-        protected class PutBody
+        public class PutBody
         {
             public PutBody()
             {
