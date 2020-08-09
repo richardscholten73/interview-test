@@ -23,11 +23,8 @@ namespace InterviewTest
             public string Name { get; set; }
         }
 
-        public StudentModule() : base("/students")
+        public StudentModule(IStudentCollection studentList, ITeacherCollection teacherList) : base("/students")
         {
-            var studentList = StudentCollection.GetInstance();
-            var teacherList = TeacherCollection.GetInstance();
-
             Get("/", args =>
             {
                 var studentRequestParams = this.Bind<StudentRequestParams>();
@@ -47,7 +44,8 @@ namespace InterviewTest
                 var updates = this.Bind<PutParams>();
                 string studentId = args.studentId;
                 var studentToUpdate = studentList.GetStudentById(studentId);
-                studentList.Update(studentToUpdate, updates);
+                studentToUpdate.Name = updates.Name;
+                studentList.Update(studentToUpdate);
                 return Response.AsJson(studentToUpdate);
             });
         }

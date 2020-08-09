@@ -7,13 +7,13 @@ using Xunit;
 
 namespace InterviewTest.Tests
 {
-    public class TeacherTest : IDisposable
+    public class TeacherTest
     {
         
         [Fact]
         public async Task Should_GetAnEmptyListOfTeachersAsync()
         {
-            var bootstrapper = new DefaultNancyBootstrapper();
+            var bootstrapper = new CustomBootstrapper();
             var browser = new Browser(bootstrapper);
 
             var result = await browser.Get("/teachers", with => with.HttpRequest());
@@ -25,7 +25,7 @@ namespace InterviewTest.Tests
         [Fact]
         public async Task Should_GetListOfTeachersAsync()
         {
-            var bootstrapper = new DefaultNancyBootstrapper();
+            var bootstrapper = new CustomBootstrapper();
             var browser = new Browser(bootstrapper);
             var testTeacher = await browser.CreateTestTeacherAsync();
 
@@ -36,10 +36,10 @@ namespace InterviewTest.Tests
             Assert.Single(teacherList, testTeacher);
         }
 
-        [Fact(Skip = "It works by itself, so remember to run this manually")]
+        [Fact]
         public async Task Should_AddAStudentToATeacherAsync()
         {
-            var bootstrapper = new DefaultNancyBootstrapper();
+            var bootstrapper = new CustomBootstrapper();
             var browser = new Browser(bootstrapper);
             var testTeacher = await browser.CreateTestTeacherAsync();
             var testStudent = await browser.CreateTestStudentAsync();
@@ -55,12 +55,6 @@ namespace InterviewTest.Tests
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
             var updatedTeacher = result.Body.DeserializeJson<Teacher>();
             Assert.Single(updatedTeacher.Students, testStudent);
-        }
-
-        public void Dispose()
-        {
-            StudentCollection.GetInstance().Clear();
-            TeacherCollection.GetInstance().Clear();
         }
     }
 }

@@ -6,12 +6,12 @@ using Xunit;
 
 namespace InterviewTest.Tests
 {
-    public class StudentTest : IDisposable
+    public class StudentTest
     {
         [Fact]
         public async Task Should_GetAnEmptyListOfStudentsAsync()
         {
-            var bootstrapper = new DefaultNancyBootstrapper();
+            var bootstrapper = new CustomBootstrapper();
             var browser = new Browser(bootstrapper);
 
             var result = await browser.Get("/students", with => with.HttpRequest());
@@ -23,7 +23,7 @@ namespace InterviewTest.Tests
         [Fact]
         public async Task Should_GetListOfStudentsAsync()
         {
-            var bootstrapper = new DefaultNancyBootstrapper();
+            var bootstrapper = new CustomBootstrapper();
             var browser = new Browser(bootstrapper);
             var testStudent = await browser.CreateTestStudentAsync();
 
@@ -37,7 +37,7 @@ namespace InterviewTest.Tests
         [Fact]
         public async Task Should_UpdateStudentAsync()
         {
-            var bootstrapper = new DefaultNancyBootstrapper();
+            var bootstrapper = new CustomBootstrapper();
             var browser = new Browser(bootstrapper);
             var testStudent = await browser.CreateTestStudentAsync();
 
@@ -49,13 +49,13 @@ namespace InterviewTest.Tests
 
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
             var updatedStudent = result.Body.DeserializeJson<Student>();
-            Assert.Equal(updatedStudent.Name, "Foo");
+            Assert.Equal("Foo", updatedStudent.Name);
         }
 
-        [Fact(Skip = "It works by itself, so remember to run this manually")]
+        [Fact]
         public async Task Should_GetListOfStudentsByTeacherAsync()
         {
-            var bootstrapper = new DefaultNancyBootstrapper();
+            var bootstrapper = new CustomBootstrapper();
             var browser = new Browser(bootstrapper);
             var testStudent = await browser.CreateTestStudentAsync();
             var testTeacher = await browser.CreateTestTeacherAsync();
@@ -70,12 +70,6 @@ namespace InterviewTest.Tests
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
             var studentList = result.Body.DeserializeJson<Student[]>();
             Assert.Single(studentList, testStudent);
-        }
-
-        public void Dispose()
-        {
-            StudentCollection.GetInstance().Clear();
-            TeacherCollection.GetInstance().Clear();
         }
     }
 }

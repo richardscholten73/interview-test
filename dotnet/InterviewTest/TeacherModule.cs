@@ -16,11 +16,8 @@ namespace InterviewTest
             public string StudentId { get; set; }
         }
 
-        public TeacherModule() : base("/teachers")
+        public TeacherModule(IStudentCollection studentList, ITeacherCollection teacherList) : base("/teachers")
         {
-            var teacherList = TeacherCollection.GetInstance();
-            var studentList = StudentCollection.GetInstance();
-
             Get("/", args => Response.AsJson(teacherList.GetTeachers()));
             Post("/", _ =>
             {
